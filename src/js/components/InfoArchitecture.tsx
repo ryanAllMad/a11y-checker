@@ -24,7 +24,7 @@ const InfoArchitectureCheck = () => {
 	];
 	return (
 		<Panel className="ally-check-panel">
-			<PanelBody title="InfoArchitecture Without Text Alternative">
+			<PanelBody title="Headings are descriptive and in order.">
 				<PanelRow>
 					<HowToPass olItems={ol} ulItems={ul} />
 				</PanelRow>

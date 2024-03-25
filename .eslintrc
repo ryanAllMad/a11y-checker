@@ -7,7 +7,8 @@
 	"rules": {
 		"import/no-extraneous-dependencies": 0,
 		"import/no-unresolved": 0,
-		"@typescript-eslint/ban-ts-comment": 0
+		"@typescript-eslint/ban-ts-comment": 0,
+		"@typescript-eslint/no-explicit-any": 0
 	},
 	"ignorePatterns": ["webpack.config.js", "dist"],
 }

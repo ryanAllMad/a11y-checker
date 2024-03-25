@@ -8,7 +8,7 @@
 }
 
 button[aria-label="A11y Checker"] {
-	@include headings();
+	color: #483d8b;
 	&.is-pressed {
 		color: #ffffff;
 		background-color: #483d8b;

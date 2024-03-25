@@ -21,7 +21,7 @@ const LinksCheck = () => {
 	];
 	return (
 		<Panel className="ally-check-panel">
-			<PanelBody title="Links Without Text Alternative">
+			<PanelBody title="Links are descriptive and not redundant.">
 				<PanelRow>
 					<HowToPass olItems={ol} ulItems={ul} />
 				</PanelRow>

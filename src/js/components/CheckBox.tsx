@@ -3,23 +3,23 @@ import * as React from 'react';
 import { CheckboxControl } from '@wordpress/components';
 
 interface CheckBox {
-	checked: boolean;
 	help: string;
 	label: string;
-	onChange: (e: boolean) => void;
+	onChange: (e: any) => boolean;
 }
 
 const CheckBox = (props: CheckBox) => {
-	const { checked, help, label, onChange } = props;
+	const { help, label, onChange } = props;
+	// const [checked, setChecked] = React.useState(false);
+	// const handleChange = (e: any) => {
+	// 	if (e.target.checked) {
+	// 		setChecked(true);
+	// 	} else {
+	// 		setChecked(false);
+	// 	}
+	// };
 
-	return (
-		<CheckboxControl
-			checked={checked}
-			help={help}
-			label={label}
-			onChange={onChange}
-		/>
-	);
+	return <CheckboxControl help={help} label={label} onChange={onChange} />;
 };
 
 export default CheckBox;
