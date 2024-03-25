@@ -1,2 +1,2 @@
 // eslint-disable-next-line import/no-unresolved
-import './A11ySidebar';
+import './components/A11ySidebar';

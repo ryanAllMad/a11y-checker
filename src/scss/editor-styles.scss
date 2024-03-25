@@ -1,5 +1,31 @@
-body {
-	.home {
-		color: rgb(136, 40, 226);
+@mixin headings {
+	color: #483d8b;
+	padding: 0.5em 1em;
+	svg {
+		fill: #483d8b;
+		margin-bottom: -6px;
+	}
+}
+
+button[aria-label="A11y Checker"] {
+	@include headings();
+	&.is-pressed {
+		color: #ffffff;
+		background-color: #483d8b;
+	}
+}
+
+.ally-check-panel {
+	color: #1b1b1b;
+	h2, h3 {
+		@include headings();
+		button {
+			@include headings();
+			background-color: #f0f0f0;
+		}
+	}
+	.components-panel__row {
+		flex-direction: column;
+		align-items: flex-start;
 	}
 }

@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function a11y_editor_scripts() {
+	if ( ! is_admin() ) {
+		return;
+	}
 	wp_enqueue_style(
 		'main-style',
 		plugins_url( '/dist/main.css', __FILE__ ),
