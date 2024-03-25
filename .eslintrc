@@ -1,0 +1,8 @@
+{
+    "extends": [ 
+		"plugin:@wordpress/eslint-plugin/recommended-with-formatting", 
+		"plugin:prettier/recommended",
+		"plugin:@typescript-eslint/recommended"
+	],
+	"ignorePatterns": ["webpack.config.js", "dist"]
+}

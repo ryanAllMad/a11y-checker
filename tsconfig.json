@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"target": "es6",
+		"lib": ["dom", "dom.iterable", "es6"],
+		"outDir": "./dist/js",
+		"noImplicitAny": true,
+		"jsx": "react",
+		"allowJs": true,
+		"moduleResolution": "node"
+},
+	"include": ["src"],
+	"exclude": ["node_modules"]
+}
