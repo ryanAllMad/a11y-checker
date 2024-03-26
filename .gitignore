@@ -6,5 +6,4 @@ wp-cli.local.yml
 node_modules/
 *.sql
 *.tar.gz
-*.zip
 dist/
