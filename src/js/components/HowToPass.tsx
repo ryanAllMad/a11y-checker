@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Icon } from '@wordpress/components';
+import { external } from '@wordpress/icons';
 
 interface HowToPass {
 	olItems: string[];
@@ -24,6 +26,7 @@ const HowToPass = (props: HowToPass) => {
 						<li key={li.text}>
 							<a href={li.href} target="_blank" rel="noreferrer">
 								{li.text}
+								<Icon icon={external} size={14} />
 							</a>
 						</li>
 					);

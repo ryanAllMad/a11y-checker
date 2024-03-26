@@ -1,7 +1,20 @@
 import * as React from 'react';
-import { Panel, PanelBody, PanelRow, Icon } from '@wordpress/components';
+import {
+	Panel,
+	PanelBody,
+	PanelRow,
+	Icon,
+	Button,
+} from '@wordpress/components';
 import { warning } from '@wordpress/icons';
+import { useSelect } from '@wordpress/data';
+import { hasElement } from '../helpers/hasElement';
+import { insertElementStyles } from '../helpers/insertElementStyles';
 import HowToPass from './HowToPass';
+import FoundPanel from './FoundPanel';
+
+const hasPostTitle = hasElement(`.wp-block-post-title`);
+const hasHeadings = hasElement(`.wp-block-heading`);
 
 const InfoArchitectureCheck = () => {
 	const ol = [
@@ -22,25 +35,93 @@ const InfoArchitectureCheck = () => {
 			href: 'https://www.w3.org/WAI/WCAG20/quickref/?showtechniques=128%2C14&currentsidebar=%23col_overview#navigation-mechanisms-descriptive',
 		},
 	];
+
+	const [showHeadings, setShowHeadings] = React.useState(false);
+	const [openDoc, setOpenDoc] = React.useState(false);
+
+	const handleShow = () => {
+		setShowHeadings((prev) => (!prev ? true : false));
+	};
+	React.useEffect(() => {
+		insertElementStyles(
+			`.wp-block-heading, .wp-block-post-title`,
+			showHeadings
+		);
+	}, [showHeadings]);
+
+	const allBlocks = useSelect(
+		(select: any) => select('core/block-editor').getBlocks(),
+		[]
+	);
+	const computeOutlineHeadings = (blocks: any[] = []): any => {
+		return blocks.flatMap((block = {}) => {
+			if (block.name === 'core/heading') {
+				return {
+					...block,
+					level: block.attributes.level,
+				};
+			}
+			return computeOutlineHeadings(block.innerBlocks);
+		});
+	};
+	const headingsArray: number[] = [];
+	computeOutlineHeadings(allBlocks).forEach((b: any) =>
+		headingsArray.push(b.attributes.level)
+	);
+	const headingsInOrder = headingsArray.every(
+		(num, i) => i === headingsArray.length - 1 || num < headingsArray[i + 1]
+	);
+	const handleDocOutlineClick = () => {
+		setOpenDoc((prev) => (!prev ? true : false));
+		const outlineButton = document.querySelector(
+			`[aria-label="Document Overview"]`
+		);
+		let outlineClicked = false;
+		outlineButton.addEventListener('click', () => {
+			outlineClicked = true;
+		});
+		// @ts-expect-error
+		outlineButton.click();
+
+		setTimeout(() => {
+			if (outlineClicked) {
+				const outline = document.querySelector(
+					'.edit-post-editor__document-overview-panel__tab-panel .components-tab-panel__tabs button:last-child'
+				);
+				if (outline) {
+					// @ts-expect-error
+					outline.click();
+				}
+			}
+		}, 800);
+	};
 	return (
 		<Panel className="ally-check-panel">
 			<PanelBody title="Headings are descriptive and in order.">
 				<PanelRow>
 					<HowToPass olItems={ol} ulItems={ul} />
 				</PanelRow>
-				<PanelRow>
+				<FoundPanel
+					found={hasPostTitle || hasHeadings}
+					onClick={handleShow}
+					showEl={showHeadings}
+					setShowEl={setShowHeadings}
+					el="headings"
+				/>
+				<PanelRow className="a11y-heading-order">
 					<h3>
 						<Icon icon={warning} />
-						Page title and headings are descriptive.
+						{headingsInOrder
+							? `Headings in order.`
+							: `Headings are out of order`}
 					</h3>
-					<p>Mark as done.</p>
-				</PanelRow>
-				<PanelRow>
-					<h3>
-						<Icon icon={warning} />
-						Headings in order.
-					</h3>
-					<p>Headings that are out of order are highlighted.</p>
+					<p>Please open the Document Outline to reaolve.</p>
+					<Button
+						onClick={handleDocOutlineClick}
+						aria-pressed={openDoc}
+					>
+						Open Document Outline
+					</Button>
 				</PanelRow>
 			</PanelBody>
 		</Panel>

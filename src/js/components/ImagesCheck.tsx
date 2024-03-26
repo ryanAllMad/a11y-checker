@@ -3,9 +3,11 @@ import { Panel, PanelBody, PanelRow, Icon } from '@wordpress/components';
 import { warning } from '@wordpress/icons';
 import { useSelect } from '@wordpress/data';
 import HowToPass from './HowToPass';
+import { getFileName } from '../helpers/getFileName';
 import CheckBox from './CheckBox';
 
 const ImagesCheck = () => {
+	const [decorative, setDecorative] = React.useState([]);
 	const ol = [
 		' Include meaningful information describing each image in the alt text. ',
 		' Don’t start the alt text with Image of or Photo of – the screen reader already announces that images are images. ',
@@ -44,10 +46,17 @@ const ImagesCheck = () => {
 	};
 
 	const imagesWithoutAlt = getImagesWithoutAlt(imageBlocks);
-	// eslint-disable-next-line no-console
-	console.log(imageBlocks);
-	// eslint-disable-next-line no-console
-	console.log(imagesWithoutAlt);
+
+	const handleCheck = (e: any, dec: string) => {
+		if (e) {
+			setDecorative((oldArray) => [...oldArray, dec]);
+		}
+		if (!e) {
+			const newList = decorative.filter((i) => i !== dec);
+			setDecorative(newList);
+		}
+	};
+
 	return (
 		<Panel className="ally-check-panel">
 			<PanelBody title="Images Without Text Alternative">
@@ -60,23 +69,28 @@ const ImagesCheck = () => {
 						The following images have no text alternative
 					</h3>
 					{imagesWithoutAlt.map((img: any) => {
+						const imageFile = getFileName(img.attributes.url);
 						return (
 							<React.Fragment key={img.clientId}>
 								<CheckBox
-									help="Mark images that are decorative"
-									label={`${img.attributes.url}`}
-									onChange={(e) => e.target.checked}
+									help="Mark done if the image has no purpose, or is already described within the text."
+									label={`${imageFile}`}
+									onChange={(e) =>
+										handleCheck(e, `${imageFile}`)
+									}
 								/>
 							</React.Fragment>
 						);
 					})}
-					<p>Mark images that are decorative</p>
 				</PanelRow>
 				<PanelRow>
-					<h3>
-						<Icon icon={warning} />
-						Images marked as decorative
-					</h3>
+					<h3>Images marked as decorative</h3>
+					<ol>
+						{decorative.length > 0 &&
+							decorative.map((dec) => {
+								return <li key={dec}>{dec}</li>;
+							})}
+					</ol>
 				</PanelRow>
 			</PanelBody>
 		</Panel>

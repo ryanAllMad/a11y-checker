@@ -1,31 +1,52 @@
 @mixin headings {
 	color: #483d8b;
 	padding: 0.5em 1em;
+
 	svg {
 		fill: #483d8b;
 		margin-bottom: -6px;
 	}
 }
+@mixin button-pressed {
+	color: #fff;
+	background-color: #483d8b;
+}
 
 button[aria-label="A11y Checker"] {
 	color: #483d8b;
+
 	&.is-pressed {
-		color: #ffffff;
-		background-color: #483d8b;
+		@include button-pressed();
 	}
 }
 
 .ally-check-panel {
 	color: #1b1b1b;
+
 	h2, h3 {
 		@include headings();
+
 		button {
 			@include headings();
 			background-color: #f0f0f0;
 		}
 	}
+
+	// stylelint-disable-next-line selector-class-pattern
 	.components-panel__row {
 		flex-direction: column;
 		align-items: flex-start;
+
+		&.a11y-found-show,
+		&.a11y-heading-order {
+			button {
+				color: #483d8b;
+				margin-bottom: 1.5em;
+
+				&[aria-pressed="true"] {
+					@include button-pressed();
+				}
+			}
+		}
 	}
 }

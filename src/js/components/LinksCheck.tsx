@@ -1,13 +1,16 @@
 import * as React from 'react';
-import { Panel, PanelBody, PanelRow, Icon } from '@wordpress/components';
-import { warning } from '@wordpress/icons';
+import { Panel, PanelBody, PanelRow } from '@wordpress/components';
+import { hasElement } from '../helpers/hasElement';
+import { insertElementStyles } from '../helpers/insertElementStyles';
+import FoundPanel from './FoundPanel';
 import HowToPass from './HowToPass';
+
+const hasLinks = hasElement(`.wp-block-paragraph a[data-type="link"]`);
 
 const LinksCheck = () => {
 	const ol = [
 		' Link text that’s as specific as possible. ',
-		'Include information about what a link leads to.',
-		'If you have an image and text linked to the same location, mark one of them as hidden below.',
+		'Include information about where a link leads to.',
 	];
 	const ul = [
 		{
@@ -19,26 +22,31 @@ const LinksCheck = () => {
 			href: 'https://www.w3.org/WAI/WCAG20/quickref/?showtechniques=14%2C128&currentsidebar=%23col_overview#navigation-mechanisms-refs',
 		},
 	];
+	const [showLinks, setShowLinks] = React.useState(false);
+
+	const handleShow = () => {
+		setShowLinks((prev) => (!prev ? true : false));
+	};
+	React.useEffect(() => {
+		insertElementStyles(
+			`.wp-block-paragraph a[data-type="link"]`,
+			showLinks
+		);
+	}, [showLinks]);
+
 	return (
 		<Panel className="ally-check-panel">
 			<PanelBody title="Links are descriptive and not redundant.">
 				<PanelRow>
 					<HowToPass olItems={ol} ulItems={ul} />
 				</PanelRow>
-				<PanelRow>
-					<h3>
-						<Icon icon={warning} />
-						Links are descriptive
-					</h3>
-					<p>Mark as done.</p>
-				</PanelRow>
-				<PanelRow>
-					<h3>
-						<Icon icon={warning} />
-						Redundant links found, hide duplicate links
-					</h3>
-					<p>Mark text links as hidden from screen readers.</p>
-				</PanelRow>
+				<FoundPanel
+					onClick={handleShow}
+					showEl={showLinks}
+					setShowEl={setShowLinks}
+					el="links"
+					found={hasLinks}
+				/>
 			</PanelBody>
 		</Panel>
 	);
