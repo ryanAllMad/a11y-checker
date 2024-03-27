@@ -16,8 +16,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-function a11y_editor_scripts() {
-	if ( ! is_admin() ) {
+function rd_a11y_check_editor_scripts() {
+	if ( ! is_admin() || ! current_user_can( 'edit_posts' ) ) {
 		return;
 	}
 	wp_enqueue_style(
@@ -38,4 +38,4 @@ function a11y_editor_scripts() {
 	);
 }
 
-add_action( 'enqueue_block_assets', 'a11y_editor_scripts' );
+add_action( 'enqueue_block_assets', 'rd_a11y_check_editor_scripts' );
