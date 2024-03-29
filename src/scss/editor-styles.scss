@@ -10,6 +10,7 @@
 @mixin button-pressed {
 	color: #fff;
 	background-color: #483d8b;
+	border: 1px solid #fff;
 }
 
 button[aria-label="A11y Checker"] {
@@ -41,7 +42,9 @@ button[aria-label="A11y Checker"] {
 		&.a11y-heading-order {
 			button {
 				color: #483d8b;
+				border: 1px solid #483d8b;
 				margin-bottom: 1.5em;
+				align-self: center;
 
 				&[aria-pressed="true"] {
 					@include button-pressed();

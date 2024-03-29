@@ -24,8 +24,8 @@ const FoundPanel = (props: FoundPanel) => {
 				{found && (
 					<>
 						<Button onClick={onClick} aria-pressed={showEl}>
-							{!showEl ? `Show ${el}?` : `Hide ${el}?`}
 							<Icon icon={seen} />
+							{!showEl ? `Show ${el}?` : `Hide ${el}?`}
 						</Button>
 						<CheckBox
 							help={`${el.toUpperCase()} are highlighted in the editor. Mark done if ${el} are descriptive.`}

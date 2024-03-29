@@ -155,11 +155,11 @@ const InfoArchitectureCheck = () => {
 					</h3>
 					{(!loading && !hasGoodHeadings) || hasMultipleH1 ? (
 						<>
-							<Icon icon={warning} />
-							<p>Please open the Document Outline to reaolve.</p>
+							<p>Please open the Document Outline to resolve.</p>
 							<Button
 								onClick={handleDocOutlineClick}
 								aria-pressed={openDoc}
+								icon={warning}
 							>
 								Open Document Outline
 							</Button>
