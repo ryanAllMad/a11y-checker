@@ -42,12 +42,6 @@ const InfoArchitectureCheck = () => {
 	const handleShow = () => {
 		setShowHeadings((prev) => (!prev ? true : false));
 	};
-	React.useEffect(() => {
-		insertElementStyles(
-			`.wp-block-heading, .wp-block-post-title`,
-			showHeadings
-		);
-	}, [showHeadings]);
 
 	const allBlocks = useSelect(
 		(select: any) => select('core/block-editor').getBlocks(),
@@ -64,13 +58,41 @@ const InfoArchitectureCheck = () => {
 			return computeOutlineHeadings(block.innerBlocks);
 		});
 	};
-	const headingsArray: number[] = [];
-	computeOutlineHeadings(allBlocks).forEach((b: any) =>
-		headingsArray.push(b.attributes.level)
+
+	const headings = computeOutlineHeadings(allBlocks);
+	const countByLevel = headings.reduce(
+		(acc: any[], heading: any) => ({
+			...acc,
+			[heading.level]: (acc[heading.level] || 0) + 1,
+		}),
+		{}
 	);
-	const headingsInOrder = headingsArray.every(
-		(num, i) => i === headingsArray.length - 1 || num < headingsArray[i + 1]
-	);
+	const hasMultipleH1 = hasPostTitle && countByLevel[1] > 1;
+
+	const [hasGoodHeadings, setHasGoodHeadings] = React.useState(false);
+	const [loading, setLoading] = React.useState(true);
+
+	React.useEffect(() => {
+		insertElementStyles(
+			`.wp-block-heading, .wp-block-post-title`,
+			showHeadings
+		);
+		const getGoodHeadings = (headArr: any[]) => {
+			return headArr.every((h: any, idx: number) => {
+				const nextHeading =
+					headArr.length > idx + 1 ? headArr[idx + 1] : h;
+				return (
+					h.level === nextHeading.level ||
+					nextHeading.level - h.level === 1 ||
+					nextHeading.level < h.level
+				);
+			});
+		};
+
+		setHasGoodHeadings(getGoodHeadings(headings));
+		setLoading(false);
+	}, [hasGoodHeadings, headings, showHeadings]);
+
 	const handleDocOutlineClick = () => {
 		setOpenDoc((prev) => (!prev ? true : false));
 		const outlineButton = document.querySelector(
@@ -110,18 +132,41 @@ const InfoArchitectureCheck = () => {
 				/>
 				<PanelRow className="a11y-heading-order">
 					<h3>
-						<Icon icon={warning} />
-						{headingsInOrder
-							? `Headings in order.`
-							: `Headings are out of order`}
+						{loading && 'Processing headings...'}
+						{!loading && !hasGoodHeadings ? (
+							<>
+								<Icon icon={warning} />
+								{`Headings are out of order`}
+							</>
+						) : (
+							<>{`Headings in order.`}</>
+						)}
 					</h3>
-					<p>Please open the Document Outline to reaolve.</p>
-					<Button
-						onClick={handleDocOutlineClick}
-						aria-pressed={openDoc}
-					>
-						Open Document Outline
-					</Button>
+
+					<h3>
+						{hasMultipleH1 ? (
+							<>
+								<Icon icon={warning} />
+								{`Only one H1 heading allowed on a page`}
+							</>
+						) : (
+							<>{`H1 looks good!`}</>
+						)}
+					</h3>
+					{(!loading && !hasGoodHeadings) || hasMultipleH1 ? (
+						<>
+							<Icon icon={warning} />
+							<p>Please open the Document Outline to reaolve.</p>
+							<Button
+								onClick={handleDocOutlineClick}
+								aria-pressed={openDoc}
+							>
+								Open Document Outline
+							</Button>
+						</>
+					) : (
+						<>{`Page is looking good!`}</>
+					)}
 				</PanelRow>
 			</PanelBody>
 		</Panel>
