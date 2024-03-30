@@ -20,6 +20,7 @@ const InfoArchitectureCheck = () => {
 	const ol = [
 		'For Page titles: Users who rely on assistive technologies like screen readers may not be able to use visual cues to determine a page’s purpose. Make sure your page titles concisely convey each page’s focus.',
 		'For headings: Use precise and descriptive headings to help readers grasp the main points of a piece without reading it in its entirety.',
+		'Headings are designed to convey logical hierarchy. Since headings indicate the start of important sections of content, it is possible for users with assistive technology to jump directly to the appropriate heading and begin reading the content.',
 	];
 	const ul = [
 		{
@@ -165,7 +166,7 @@ const InfoArchitectureCheck = () => {
 							</Button>
 						</>
 					) : (
-						<>{`Page is looking good!`}</>
+						<>{`No issues with your headings, Great work!`}</>
 					)}
 				</PanelRow>
 			</PanelBody>

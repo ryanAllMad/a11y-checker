@@ -5,12 +5,12 @@ import { insertElementStyles } from '../helpers/insertElementStyles';
 import FoundPanel from './FoundPanel';
 import HowToPass from './HowToPass';
 
-const hasLinks = hasElement(`.wp-block-paragraph a[data-type="link"]`);
+const hasLinks = hasElement(`.editor-styles-wrapper a[href]`);
 
 const LinksCheck = () => {
 	const ol = [
-		' Link text that’s as specific as possible. ',
-		'Include information about where a link leads to.',
+		'Link text is unique, describes the link context and where it leads to.',
+		'Duplicate links to the same location are hidden from screen readers.',
 	];
 	const ul = [
 		{
@@ -28,10 +28,7 @@ const LinksCheck = () => {
 		setShowLinks((prev) => (!prev ? true : false));
 	};
 	React.useEffect(() => {
-		insertElementStyles(
-			`.wp-block-paragraph a[data-type="link"]`,
-			showLinks
-		);
+		insertElementStyles(`.editor-styles-wrapper a[href]`, showLinks);
 	}, [showLinks]);
 
 	return (

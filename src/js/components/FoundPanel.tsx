@@ -17,12 +17,13 @@ const FoundPanel = (props: FoundPanel) => {
 	return (
 		<>
 			<PanelRow className="a11y-found-show">
-				<h3>
-					<Icon icon={warning} />
-					{`We found ${el} on the page`}
-				</h3>
+				{!found && <h3>{`No ${el} on the page.`}</h3>}
 				{found && (
 					<>
+						<h3>
+							<Icon icon={warning} />
+							{`We found ${el} on the page`}
+						</h3>
 						<Button onClick={onClick} aria-pressed={showEl}>
 							<Icon icon={seen} />
 							{!showEl ? `Show ${el}?` : `Hide ${el}?`}
